@@ -4,3 +4,4 @@
 docker-build-versions.rb
 Dockerfile.erb
 README.md
+.git
