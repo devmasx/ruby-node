@@ -1,5 +1,4 @@
-FROM <%= base_image %>
-LABEL mainteiner=example@mail.com
+FROM ruby:<%= tag %>
 # install common dev libs
 RUN apt-get update -qq && apt-get install -y \
   build-essential \

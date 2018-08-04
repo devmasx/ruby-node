@@ -18,18 +18,17 @@ def docker_build(tag)
   system("docker build -t #{DOCKERHUB_REPOSITORY}:#{tag} .")
 end
 
-def dockerfile_build(base_image)
+def dockerfile_build(tag)
   template = ERB.new(File.read('Dockerfile.erb'))
   result = template.result(binding)
   File.open('Dockerfile', 'w') { |file| file.write(result) }
-  puts "build Dockerfile #{base_image}"
+  puts "build Dockerfile #{tag}"
 end
 
 ruby_debian_tags = fetch_all_ruby_versions.select { |_| _ =~ /(slim|stretch|jessie|wheezy)/ }
 
 ruby_debian_tags.each do |tag|
-  base_image = "ruby:#{tag}"
-  dockerfile_build(base_image)
+  dockerfile_build(tag)
   docker_build(tag)
   docker_push(tag)
 end
