@@ -20,11 +20,7 @@ def docker_build(tag)
   system("docker build -t #{DOCKERHUB_REPOSITORY}:#{tag} .")
 end
 
-def docker_push(tag)
-  system("docker push #{DOCKERHUB_REPOSITORY}:#{tag} .")
-end
-
-def build_dockerfile(base_image)
+def dockerfile_build(base_image)
   template = ERB.new(File.read('Dockerfile.erb'))
   result = template.result(binding)
   File.open('Dockerfile', 'w') { |file| file.write(result) }
@@ -33,7 +29,7 @@ end
 
 base_images.each do |base_image|
   tag_name = base_image.split(':').last
-  build_dockerfile(base_image)
+  dockerfile_build(base_image)
   docker_build(tag_name)
   docker_push(tag_name)
 end
