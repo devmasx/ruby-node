@@ -25,11 +25,11 @@ def dockerfile_build(base_image)
   puts "build Dockerfile #{base_image}"
 end
 
-base_images = fetch_all_ruby_versions.select { |_| _ =~ /(slim|stretch|jessie|wheezy)/ }
+ruby_debian_tags = fetch_all_ruby_versions.select { |_| _ =~ /(slim|stretch|jessie|wheezy)/ }
 
-base_images.each do |base_image|
-  tag_name = base_image.split(':').last
+ruby_debian_tags.each do |tag|
+  base_image = "ruby:#{tag}"
   dockerfile_build(base_image)
-  docker_build(tag_name)
-  docker_push(tag_name)
+  docker_build(tag)
+  docker_push(tag)
 end
