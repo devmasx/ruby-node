@@ -1,16 +1,14 @@
 require 'erb'
-base_images = %w[
-  ruby:2.2-slim
-  ruby:2.2.10-slim
-  ruby:2.3-slim
-  ruby:2.3.7-slim
-  ruby:2.4-slim
-  ruby:2.4.4-slim
-  ruby:2.5-slim
-  ruby:2.5.1-slim
-]
+require 'json'
+require 'net/http'
 
 DOCKERHUB_REPOSITORY = 'devmasx/ruby-node'.freeze
+
+def fetch_all_ruby_versions
+  response = JSON.parse Net::HTTP.get URI 'https://registry.hub.docker.com/v1/repositories/ruby/tags'
+  response.map{|_| _["name"]}
+end
+
 # you need login in docker hub
 def docker_push(tag)
   system("docker push #{DOCKERHUB_REPOSITORY}:#{tag}")
@@ -26,6 +24,8 @@ def dockerfile_build(base_image)
   File.open('Dockerfile', 'w') { |file| file.write(result) }
   puts "build Dockerfile #{base_image}"
 end
+
+base_images = fetch_all_ruby_versions.select { |_| _ =~ /(slim|stretch|jessie|wheezy)/ }
 
 base_images.each do |base_image|
   tag_name = base_image.split(':').last

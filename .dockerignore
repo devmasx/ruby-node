@@ -1,0 +1,6 @@
+.all-ruby-versions
+.all-ruby-versions-debian
+.gitignore
+docker-build-versions.rb
+Dockerfile.erb
+README.md
