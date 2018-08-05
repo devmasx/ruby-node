@@ -7,5 +7,4 @@ FROM ruby:<%= tag %>
 
 COPY --from=node /usr/local/bin/ /usr/local/bin/
 COPY --from=node /usr/local/lib/ /usr/local/lib/
-COPY --from=node usr/local/bin/yarn usr/local/bin/yarn
 COPY --from=node /opt/yarn-v1.6.0/ /opt/yarn-v1.6.0/
